@@ -107,31 +107,31 @@ export default function FloatingChat({
   const currentEngineLabel = engineOptions.find(o => o.value === engineType)?.label || 'Draw.io';
 
   const chartTypeOptions = [
-    { value: 'auto', label: '自动' },
-    { value: 'flowchart', label: '流程图' },
-    { value: 'mindmap', label: '思维导图' },
-    { value: 'orgchart', label: '组织架构图' },
-    { value: 'sequence', label: '时序图' },
-    { value: 'class', label: 'UML类图' },
-    { value: 'er', label: 'ER图' },
-    { value: 'gantt', label: '甘特图' },
-    { value: 'timeline', label: '时间线' },
-    { value: 'tree', label: '树形图' },
-    { value: 'network', label: '网络拓扑图' },
-    { value: 'architecture', label: '架构图' },
-    { value: 'dataflow', label: '数据流图' },
-    { value: 'state', label: '状态图' },
-    { value: 'swimlane', label: '泳道图' },
-    { value: 'concept', label: '概念图' },
-    { value: 'fishbone', label: '鱼骨图' },
-    { value: 'swot', label: 'SWOT分析图' },
-    { value: 'pyramid', label: '金字塔图' },
-    { value: 'funnel', label: '漏斗图' },
-    { value: 'venn', label: '韦恩图' },
-    { value: 'matrix', label: '矩阵图' },
-    { value: 'infographic', label: '信息图' },
+    { value: 'auto', label: 'Auto' },
+    { value: 'flowchart', label: 'Flowchart' },
+    { value: 'mindmap', label: 'Mind Map' },
+    { value: 'orgchart', label: 'Organization Chart' },
+    { value: 'sequence', label: 'Sequence Diagram' },
+    { value: 'class', label: 'UML Class Diagram' },
+    { value: 'er', label: 'ER Diagram' },
+    { value: 'gantt', label: 'Gantt Chart' },
+    { value: 'timeline', label: 'Timeline' },
+    { value: 'tree', label: 'Tree Diagram' },
+    { value: 'network', label: 'Network Topology' },
+    { value: 'architecture', label: 'Architecture Diagram' },
+    { value: 'dataflow', label: 'Data Flow Diagram' },
+    { value: 'state', label: 'State Diagram' },
+    { value: 'swimlane', label: 'Swimlane Diagram' },
+    { value: 'concept', label: 'Concept Map' },
+    { value: 'fishbone', label: 'Fishbone Diagram' },
+    { value: 'swot', label: 'SWOT Analysis' },
+    { value: 'pyramid', label: 'Pyramid Chart' },
+    { value: 'funnel', label: 'Funnel Chart' },
+    { value: 'venn', label: 'Venn Diagram' },
+    { value: 'matrix', label: 'Matrix Diagram' },
+    { value: 'infographic', label: 'Infographic' },
   ];
-  const currentTypeLabel = chartTypeOptions.find(o => o.value === chartType)?.label || '自动识别';
+  const currentTypeLabel = chartTypeOptions.find(o => o.value === chartType)?.label || 'Auto Detect';
 
   const handleSend = async () => {
     if ((input.trim() === '' && images.length === 0 && files.length === 0) || isGenerating) return;
@@ -156,7 +156,7 @@ export default function FloatingChat({
         .map(({ name, text }) => {
           const safe = (text || '').toString();
           if (!safe) return '';
-          return `# 来自文件: ${name}\n\n${safe}`;
+          return `# From file: ${name}\n\n${safe}`;
         })
         .filter(Boolean);
       if (parts.length) {
@@ -433,7 +433,7 @@ export default function FloatingChat({
             ref={engineMenuButtonRef}
             onClick={() => setShowEngineMenu(v => !v)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-50 border border-zinc-200 text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:border-zinc-300 transition-all group"
-            title="切换绘图引擎"
+            title="Switch Drawing Engine"
           >
             <span>{currentEngineLabel}</span>
             <ChevronDown className={cn(
@@ -475,7 +475,7 @@ export default function FloatingChat({
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg"
-            title="历史记录"
+            title="History"
             onClick={() => onOpenHistory && onOpenHistory()}
           >
             <Clock className="w-4 h-4" />
@@ -484,7 +484,7 @@ export default function FloatingChat({
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg"
-            title="新建对话"
+            title="New Chat"
             onClick={() => (onNewChat ? onNewChat() : window.dispatchEvent(new CustomEvent('new-chat')))}
           >
             <MessageSquarePlus className="w-4 h-4" />
@@ -493,7 +493,7 @@ export default function FloatingChat({
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg"
-            title="收起面板"
+            title="Collapse Panel"
             onClick={() => setIsOpen(false)}
           >
             <Minimize2 className="w-4 h-4" />
@@ -507,16 +507,16 @@ export default function FloatingChat({
           {messages.length === 0 ? (
             <div className="flex flex-col py-6 gap-4">
               <div className="text-center text-zinc-400 text-sm mb-2">
-                <p>选择一个示例开始，或直接输入需求</p>
+                <p>Select an example to start, or enter your requirements directly</p>
               </div>
               <div className="flex flex-col gap-2">
                 {[
-                  { text: '画一个用户登录流程图', icon: '🔐' },
-                  { text: '设计一个电商系统架构图', icon: '🏗️' },
-                  { text: '创建一个项目管理思维导图', icon: '🧠' },
-                  { text: '绘制公司组织架构图', icon: '👥' },
-                  { text: '画一个订单状态流转图', icon: '📦' },
-                  { text: '设计用户注册时序图', icon: '⏱️' },
+                  { text: 'Draw a user login flowchart', icon: '🔐' },
+                  { text: 'Design an e-commerce system architecture', icon: '🏗️' },
+                  { text: 'Create a project management mind map', icon: '🧠' },
+                  { text: 'Draw a company organization chart', icon: '👥' },
+                  { text: 'Draw an order status flow diagram', icon: '📦' },
+                  { text: 'Design a user registration sequence diagram', icon: '⏱️' },
                 ].map((item, idx) => (
                   <button
                     key={idx}
@@ -571,7 +571,7 @@ export default function FloatingChat({
                           )}
                         >
                           <RefreshCw className="w-3 h-3" />
-                          <span>重新生成</span>
+                          <span>Regenerate</span>
                         </button>
                       )}
                     </div>
@@ -593,7 +593,7 @@ export default function FloatingChat({
                          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-sm">
                              <WandSparkles className="w-3.5 h-3.5 text-white" />
                          </div>
-                         <span className="text-xs font-medium text-zinc-500">AI 生成</span>
+                         <span className="text-xs font-medium text-zinc-500">AI Generated</span>
                       </div>
                       <CodeBubble
                         codeText={extractCode(msg.content)}
@@ -611,7 +611,7 @@ export default function FloatingChat({
                           )}
                         >
                           <RefreshCw className="w-3 h-3" />
-                          <span>重新生成</span>
+                          <span>Regenerate</span>
                         </button>
                       )}
                     </div>
@@ -632,7 +632,7 @@ export default function FloatingChat({
                             <button
                               onClick={() => copyUserMessage(msg.content, idx)}
                               className="absolute -left-8 top-2 opacity-0 group-hover/bubble:opacity-100 transition-opacity p-1.5 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-full"
-                              title="复制"
+                              title="Copy"
                             >
                               {copiedIndex === idx ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                             </button>
@@ -709,7 +709,7 @@ export default function FloatingChat({
                           )}
                         >
                           <RefreshCw className="w-3 h-3" />
-                          <span>重新生成</span>
+                          <span>Regenerate</span>
                         </button>
                       )}
                     </div>
@@ -728,7 +728,7 @@ export default function FloatingChat({
                          <div className="w-6 h-6 rounded-lg bg-zinc-100 flex items-center justify-center">
                              <WandSparkles className="w-3.5 h-3.5 text-zinc-400 animate-pulse" />
                          </div>
-                         <span className="text-xs font-medium text-zinc-500">正在绘制...</span>
+                         <span className="text-xs font-medium text-zinc-500">Drawing...</span>
                       </div>
                       <StreamingCodeBubble codeText={streamingContent} />
                    </div>
@@ -739,7 +739,7 @@ export default function FloatingChat({
                       <div className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                       <div className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
-                    <span className="text-sm text-zinc-500">思考中...</span>
+                    <span className="text-sm text-zinc-500">Thinking...</span>
                   </div>
                 )}
               </div>
@@ -840,7 +840,7 @@ export default function FloatingChat({
                   setImages(prev => [...prev, ...next]);
                 }
               }}
-              placeholder="描述你的需求，支持上传图片/文件..."
+              placeholder="Describe your requirements, supports image/file upload..."
               rows={1}
               maxLength={10000}
               className={cn(
@@ -881,7 +881,7 @@ export default function FloatingChat({
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/50 rounded-lg"
-                    title="上传文件"
+                    title="Upload File"
                   >
                     <FileText className="w-4 h-4" />
                   </Button>
@@ -908,7 +908,7 @@ export default function FloatingChat({
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/50 rounded-lg"
-                    title="上传图片"
+                    title="Upload Image"
                   >
                     <ImageIcon className="w-4 h-4" />
                   </Button>
@@ -920,7 +920,7 @@ export default function FloatingChat({
                   ref={typeMenuButtonRef}
                   onClick={() => setShowTypeMenu((v) => !v)}
                   className="h-7 px-2.5 text-xs font-medium rounded-md text-zinc-600 hover:bg-zinc-200/50 hover:text-zinc-900 transition-colors flex items-center gap-1"
-                  title="选择图表类型"
+                  title="Select Chart Type"
                 >
                   {currentTypeLabel}
                   <ChevronDown className="w-3 h-3 opacity-50" />
@@ -940,7 +940,7 @@ export default function FloatingChat({
                       ? "bg-zinc-100 text-zinc-300"
                       : "bg-primary text-primary-foreground hover:bg-primary/90"
                   )}
-                  title="发送"
+                  title="Send"
                 >
                   {isGenerating ? (
                     <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -957,7 +957,7 @@ export default function FloatingChat({
               ref={typeMenuRef}
               className="absolute left-2 bottom-14 w-48 max-h-64 overflow-y-auto rounded-xl bg-white border border-zinc-200 shadow-xl p-1.5 text-sm z-10 animate-in slide-in-from-bottom-2 fade-in duration-200"
             >
-              <div className="px-2 py-1.5 text-xs font-medium text-zinc-400">图表类型</div>
+              <div className="px-2 py-1.5 text-xs font-medium text-zinc-400">Chart Type</div>
               {chartTypeOptions.map((opt) => (
                 <button
                   key={opt.value}
@@ -1007,7 +1007,7 @@ function StreamingCodeBubble({ codeText }) {
       <div className="flex items-center justify-between px-3 py-2 bg-zinc-100/50 border-b border-zinc-200">
         <div className="flex items-center gap-2 text-[11px] font-medium text-zinc-500">
           <Code2 className="w-3.5 h-3.5" />
-          <span>代码生成中...</span>
+          <span>Generating code...</span>
         </div>
       </div>
       <div className="relative w-full min-w-0">
@@ -1055,7 +1055,7 @@ function CodeBubble({ codeText, onApplyCode, onApplyXml }) {
       <div
         className="flex items-center justify-between px-3 py-2 bg-zinc-50 border-b border-zinc-100 cursor-pointer hover:bg-zinc-100 transition-colors"
         onClick={() => setExpanded(v => !v)}
-        title={expanded ? '收起' : '展开'}
+        title={expanded ? 'Collapse' : 'Expand'}
       >
         <div className="flex items-center gap-2 text-[12px] font-medium text-zinc-600">
           <Code2 className="w-4 h-4 text-zinc-400" />
@@ -1068,10 +1068,10 @@ function CodeBubble({ codeText, onApplyCode, onApplyXml }) {
               handleApply();
             }}
             className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-xs font-medium bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100 hover:border-emerald-200 transition-all"
-            title="应用到画布"
+            title="Apply to Canvas"
           >
             <SquareMousePointer className="w-3.5 h-3.5" />
-            <span>应用</span>
+            <span>Apply</span>
           </button>
           <div className="w-px h-3.5 bg-zinc-200 mx-0.5" />
           <ChevronDown
@@ -1088,10 +1088,10 @@ function CodeBubble({ codeText, onApplyCode, onApplyXml }) {
              <button
                 onClick={copyToClipboard}
                 className="px-2 h-7 text-[11px] rounded-md bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 shadow-sm flex items-center gap-1.5 transition-all"
-                title="复制代码"
+                title="Copy Code"
               >
                 {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-                <span>{copied ? '已复制' : '复制'}</span>
+                <span>{copied ? 'Copied' : 'Copy'}</span>
               </button>
           </div>
           

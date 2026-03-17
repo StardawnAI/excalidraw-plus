@@ -43,11 +43,11 @@ export default function CombinedSettingsModal({
   }, [isOpen, initialUsePassword]);
 
   /**
-   * 验证访问密码并从服务端获取远程 LLM 配置
+   * Validate access password and fetch remote LLM config from server
    */
   const handleValidate = async () => {
     if (!password) {
-      setMessage('请先输入访问密码');
+      setMessage('Please enter access password');
       setMessageType('error');
       return;
     }
@@ -65,7 +65,7 @@ export default function CombinedSettingsModal({
 
       if (data.success && data.config) {
         const remoteConfig = {
-          name: '服务器配置（访问密码）',
+          name: 'Server Config (Access Password)',
           type: data.config.type,
           baseUrl: data.config.baseUrl,
           model: data.config.model,
@@ -78,15 +78,15 @@ export default function CombinedSettingsModal({
           );
         }
 
-        setMessage('验证成功，已获取服务器配置');
+        setMessage('Validation successful, server configuration obtained');
         setMessageType('success');
 
       } else {
-        setMessage(data.error || '远程配置验证失败');
+        setMessage(data.error || 'Remote configuration validation failed');
         setMessageType('error');
       }
     } catch (error) {
-      setMessage('验证请求失败：' + error.message);
+      setMessage('Validation request failed: ' + error.message);
       setMessageType('error');
     } finally {
       setIsValidating(false);
@@ -94,12 +94,12 @@ export default function CombinedSettingsModal({
   };
 
   /**
-   * 保存配置
+   * Save configuration
    */
   const handleSave = () => {
     if (typeof window !== 'undefined') {
-      // 只有在“访问密码”模式下才更新访问密码本身，
-      // 切换到“本地配置”模式时保留之前保存的访问密码
+      // Only update access password when in “access password” mode,
+      // Keep previously saved password when switching to “local config” mode
       if (usePassword) {
         localStorage.setItem(
           'smart-diagram-access-password',
@@ -116,7 +116,7 @@ export default function CombinedSettingsModal({
         }),
       );
     }
-    setMessage('设置已保存');
+    setMessage('Settings saved');
     setMessageType('success');
     setTimeout(() => {
       onClose?.();
@@ -143,8 +143,8 @@ export default function CombinedSettingsModal({
                 <Settings className="w-5 h-5 text-zinc-600" />
               </div>
               <div>
-                <h2 className="text-base font-semibold text-zinc-900">配置设置</h2>
-                <p className="text-xs text-zinc-500">选择 AI 模型的使用方式</p>
+                <h2 className="text-base font-semibold text-zinc-900">Configuration Settings</h2>
+                <p className="text-xs text-zinc-500">Choose how to use AI models</p>
               </div>
             </div>
             <button
@@ -158,11 +158,11 @@ export default function CombinedSettingsModal({
           {/* Body */}
           <div className="p-6 space-y-6">
             
-            {/* 1. 当前生效状态展示 */}
+            {/* 1. Current active status display */}
             <div className={cn(
               "flex items-center justify-between px-4 py-3 rounded-xl border",
-              usePassword 
-                ? "bg-emerald-50/50 border-emerald-100" 
+              usePassword
+                ? "bg-emerald-50/50 border-emerald-100"
                 : "bg-blue-50/50 border-blue-100"
             )}>
               <div className="flex items-center gap-3">
@@ -173,12 +173,12 @@ export default function CombinedSettingsModal({
                   {usePassword ? <ShieldCheck className="w-4 h-4" /> : <Laptop className="w-4 h-4" />}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">当前模式</span>
+                  <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Current Mode</span>
                   <span className={cn(
                     "text-sm font-semibold",
                     usePassword ? "text-emerald-700" : "text-blue-700"
                   )}>
-                    {usePassword ? '服务器托管模式' : '本地/自定义模式'}
+                    {usePassword ? 'Server-Managed Mode' : 'Local/Custom Mode'}
                   </span>
                 </div>
               </div>
@@ -189,57 +189,57 @@ export default function CombinedSettingsModal({
               )}
             </div>
 
-            {/* 2. 模式切换分段控制器 */}
+            {/* 2. Mode switcher segmented control */}
             <div className="bg-zinc-100/80 p-1 rounded-xl flex relative">
               <button
                 type="button"
                 onClick={() => setUsePassword(false)}
                 className={cn(
                   "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 z-10",
-                  !usePassword 
-                    ? "bg-white text-zinc-900 shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]" 
+                  !usePassword
+                    ? "bg-white text-zinc-900 shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]"
                     : "text-zinc-500 hover:text-zinc-700"
                 )}
               >
                 <Laptop className="w-4 h-4" />
-                本地配置
+                Local Config
               </button>
               <button
                 type="button"
                 onClick={() => setUsePassword(true)}
                 className={cn(
                   "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 z-10",
-                  usePassword 
-                    ? "bg-white text-zinc-900 shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]" 
+                  usePassword
+                    ? "bg-white text-zinc-900 shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]"
                     : "text-zinc-500 hover:text-zinc-700"
                 )}
               >
                 <Server className="w-4 h-4" />
-                访问密码
+                Access Password
               </button>
             </div>
 
-            {/* 3. 内容区域 */}
+            {/* 3. Content area */}
             <div className="space-y-4 min-h-[120px]">
               {!usePassword ? (
-                // 本地配置模式内容
+                // Local config mode content
                 <div className="animate-in fade-in slide-in-from-left-2 duration-300 space-y-4">
                    <div className="text-sm text-zinc-600 leading-relaxed">
-                      使用您自己的 API Key 连接 OpenAI、Ollama 或其他兼容服务。配置保存在本地浏览器中。
+                      Use your own API Key to connect to OpenAI, Ollama or other compatible services. Configuration is saved locally in your browser.
                    </div>
                    <button
                     onClick={() => setIsConfigManagerOpen(true)}
                     className="w-full flex items-center justify-between px-4 py-3 bg-white border border-zinc-200 rounded-xl hover:border-zinc-300 hover:shadow-sm transition-all group"
                   >
-                    <span className="text-sm font-medium text-zinc-700">管理本地模型配置</span>
+                    <span className="text-sm font-medium text-zinc-700">Manage Local Model Configurations</span>
                     <Settings className="w-4 h-4 text-zinc-400 group-hover:rotate-90 transition-transform duration-500" />
                   </button>
                 </div>
               ) : (
-                // 访问密码模式内容
+                // Access password mode content
                 <div className="animate-in fade-in slide-in-from-right-2 duration-300 space-y-4">
                   <div className="text-sm text-zinc-600 leading-relaxed">
-                    输入访问密码以使用服务器预设的 AI 能力。无需配置 API Key。
+                    Enter access password to use server-configured AI capabilities. No API Key configuration required.
                   </div>
                   <div className="flex gap-2">
                     <div className="relative flex-1 group">
@@ -249,7 +249,7 @@ export default function CombinedSettingsModal({
                         value={password}
                         autoComplete="new-password"
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="输入访问密码"
+                        placeholder="Enter access password"
                         className="w-full pl-9 pr-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white"
                         onKeyDown={(e) => e.key === 'Enter' && handleValidate()}
                       />
@@ -259,7 +259,7 @@ export default function CombinedSettingsModal({
                       disabled={isValidating || !password}
                       className="px-4 py-2 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 min-w-[80px] justify-center"
                     >
-                      {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : '验证'}
+                      {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Verify'}
                     </button>
                   </div>
                 </div>
@@ -290,14 +290,14 @@ export default function CombinedSettingsModal({
               onClick={onClose}
               className="px-4 py-2 text-sm font-medium text-zinc-600 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
             >
-              取消
+              Cancel
             </button>
             <button
               onClick={handleSave}
               className="px-5 py-2 text-sm font-medium text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 shadow-sm hover:shadow-md transition-all flex items-center gap-2"
             >
               <Save className="w-4 h-4" />
-              保存并生效
+              Save & Apply
             </button>
           </div>
         </div>

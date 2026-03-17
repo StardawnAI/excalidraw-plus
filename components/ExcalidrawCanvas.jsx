@@ -80,8 +80,8 @@ export default function ExcalidrawCanvas({ elements, onChange, showNotification 
   useEffect(() => {
     if (conversionError && showNotification) {
       showNotification({
-        title: '画布解析失败',
-        message: '生成的绘图代码解析时出现问题，请在聊天消息中点击「重新生成」后重试。',
+        title: 'Canvas Parsing Failed',
+        message: 'There was a problem parsing the generated drawing code. Please click "Regenerate" in the chat to try again.',
         type: 'error',
       });
     }
@@ -152,7 +152,7 @@ export default function ExcalidrawCanvas({ elements, onChange, showNotification 
         key={canvasKey}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
         onChange={handleChange}
-        langCode="zh-CN"
+        langCode="en"
         initialData={{
           elements: convertedElements,
           appState: {

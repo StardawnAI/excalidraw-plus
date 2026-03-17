@@ -32,7 +32,7 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
             return edt === editorType;
           })
         : [];
-      // 按时间倒序排列
+      // Sort by time in descending order
       setHistories(filtered.sort((a, b) => b.timestamp - a.timestamp));
     } catch (e) {
       console.error('Failed to load histories', e);
@@ -48,8 +48,8 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
   const handleDelete = (id) => {
     setConfirmDialog({
       isOpen: true,
-      title: '确认删除',
-      message: '确定要删除这条历史记录吗？',
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this history record?',
       onConfirm: async () => {
         await historyManager.deleteHistory(id);
         await loadHistories();
@@ -60,8 +60,8 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
   const handleClearAll = () => {
     setConfirmDialog({
       isOpen: true,
-      title: '确认清空',
-      message: '确定要清空所有历史记录吗？此操作不可恢复。',
+      title: 'Confirm Clear All',
+      message: 'Are you sure you want to clear all history records? This action cannot be undone.',
       onConfirm: async () => {
         await historyManager.clearAll();
         await loadHistories();
@@ -69,9 +69,9 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
     });
   };
 
-  // 格式化时间显示
+  // Format time display
   const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleString('zh-CN', {
+    return new Date(timestamp).toLocaleString('en-US', {
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
@@ -98,8 +98,8 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
                 <History className="w-5 h-5 text-zinc-600" />
             </div>
             <div>
-                <h2 className="text-lg font-semibold text-zinc-900">历史记录</h2>
-                <p className="text-xs text-zinc-500">查看与恢复之前的生成记录</p>
+                <h2 className="text-lg font-semibold text-zinc-900">History</h2>
+                <p className="text-xs text-zinc-500">View and restore previous generation records</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors mr-2"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                清空全部
+                Clear All
               </button>
             )}
             <button
@@ -126,15 +126,15 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
           {/* Info Banner */}
           <div className="mb-6 flex items-center gap-2 px-4 py-2.5 bg-blue-50/50 border border-blue-100 rounded-xl text-xs text-blue-600">
             <HardDrive className="w-3.5 h-3.5" />
-            <span>所有历史记录均加密存储在您的本地浏览器中，不会上传至服务器。</span>
+            <span>All history records are encrypted and stored locally in your browser, and will not be uploaded to the server.</span>
           </div>
 
           <div className="space-y-4">
             {histories.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-zinc-400 bg-white border border-dashed border-zinc-200 rounded-2xl">
                 <Clock className="w-12 h-12 mb-3 opacity-20" />
-                <p className="text-sm font-medium text-zinc-500">暂无历史记录</p>
-                <p className="text-xs mt-1 text-zinc-400">开始对话后，记录将自动保存</p>
+                <p className="text-sm font-medium text-zinc-500">No history records</p>
+                <p className="text-xs mt-1 text-zinc-400">Records will be automatically saved after starting a conversation</p>
               </div>
             ) : (
               histories.map((history) => (
@@ -182,18 +182,18 @@ export default function HistoryModal({ isOpen, onClose, onApply, editorType }) {
                       <button
                         onClick={() => handleApply(history)}
                         className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800 hover:shadow-sm transition-all w-full sm:w-auto"
-                        title="恢复此版本"
+                        title="Restore this version"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
-                        恢复
+                        Restore
                       </button>
                       <button
                         onClick={() => handleDelete(history.id)}
                         className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-colors w-full sm:w-auto"
-                        title="删除记录"
+                        title="Delete record"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
-                        删除
+                        Delete
                       </button>
                     </div>
                   </div>

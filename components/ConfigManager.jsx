@@ -41,7 +41,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
       setConfigs(allConfigs);
       setActiveConfigId(activeId);
     } catch (err) {
-      setError('加载配置失败: ' + err.message);
+      setError('Failed to load configurations: ' + err.message);
     }
   };
 
@@ -65,8 +65,8 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
   const handleDelete = async (configId) => {
     setConfirmDialog({
       isOpen: true,
-      title: '确认删除',
-      message: '确定要删除这个配置吗？此操作不可恢复。',
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this configuration? This action cannot be undone.',
       onConfirm: async () => {
         try {
           await configManager.deleteConfig(configId);
@@ -74,19 +74,19 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
           setError('');
           setNotification({
             isOpen: true,
-            title: '删除成功',
-            message: '配置已成功删除',
+            title: 'Deletion Successful',
+            message: 'Configuration successfully deleted',
             type: 'success'
           });
         } catch (err) {
-          setError('删除配置失败: ' + err.message);
+          setError('Failed to delete configuration: ' + err.message);
         }
       }
     });
   };
 
   const handleClone = (config) => {
-    const newName = `${config.name} (副本)`;
+    const newName = `${config.name} (Copy)`;
 
     try {
       configManager.cloneConfig(config.id, newName);
@@ -94,12 +94,12 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
       setError('');
       setNotification({
         isOpen: true,
-        title: '克隆成功',
-        message: '配置已成功克隆',
+        title: 'Clone Successful',
+        message: 'Configuration successfully cloned',
         type: 'success'
       });
     } catch (err) {
-      setError('克隆配置失败: ' + err.message);
+      setError('Failed to clone configuration: ' + err.message);
     }
   };
 
@@ -110,7 +110,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
       onConfigSelect?.(configManager.getActiveConfig());
       setError('');
     } catch (err) {
-      setError('切换配置失败: ' + err.message);
+      setError('Failed to switch configuration: ' + err.message);
     }
   };
 
@@ -123,14 +123,14 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
       if (result.success) {
         setNotification({
           isOpen: true,
-          title: '连接测试成功',
+          title: 'Connection Test Successful',
           message: result.message,
           type: 'success'
         });
       } else {
         setNotification({
           isOpen: true,
-          title: '连接测试失败',
+          title: 'Connection Test Failed',
           message: result.message,
           type: 'error'
         });
@@ -138,7 +138,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
     } catch (err) {
       setNotification({
         isOpen: true,
-        title: '连接测试失败',
+        title: 'Connection Test Failed',
         message: err.message,
         type: 'error'
       });
@@ -166,7 +166,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
       loadConfigs();
       setError('');
     } catch (err) {
-      setError('保存配置失败: ' + err.message);
+      setError('Failed to save configuration: ' + err.message);
     }
   };
 
@@ -181,7 +181,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
-      setError('导出配置失败: ' + err.message);
+      setError('Failed to export configuration: ' + err.message);
     }
   };
 
@@ -199,16 +199,16 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
         if (result.success) {
           setNotification({
             isOpen: true,
-            title: '导入成功',
-            message: `成功导入 ${result.count} 个配置`,
+            title: 'Import Successful',
+            message: `Successfully imported ${result.count} configurations`,
             type: 'success'
           });
           loadConfigs();
         } else {
-          setError('导入配置失败: ' + result.message);
+          setError('Failed to import configuration: ' + result.message);
         }
       } catch (err) {
-        setError('导入配置失败: ' + err.message);
+        setError('Failed to import configuration: ' + err.message);
       }
     };
     input.click();
@@ -245,8 +245,8 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
                 <Server className="w-5 h-5 text-zinc-600" />
             </div>
             <div>
-                <h2 className="text-lg font-semibold text-zinc-900">本地配置管理</h2>
-                <p className="text-xs text-zinc-500">管理您的 API 连接与模型参数</p>
+                <h2 className="text-lg font-semibold text-zinc-900">Local Configuration Management</h2>
+                <p className="text-xs text-zinc-500">Manage your API connections and model parameters</p>
             </div>
           </div>
           <button
@@ -261,7 +261,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
         <div className="px-6 py-4 border-b border-zinc-100 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
            <p className="text-xs text-zinc-500 bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg border border-blue-100 inline-flex items-center">
               <Activity className="w-3.5 h-3.5 mr-2" />
-              提示：若启用“访问密码”模式，将优先使用服务器端配置。
+              Note: If “Access Password” mode is enabled, server-side configuration will be prioritized.
            </p>
            <div className="flex items-center gap-2">
               <button
@@ -269,21 +269,21 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
                 className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-zinc-600 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
               >
                 <Upload className="w-4 h-4" />
-                导入
+                Import
               </button>
               <button
                 onClick={handleExport}
                 className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-zinc-600 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
               >
                 <Download className="w-4 h-4" />
-                导出
+                Export
               </button>
               <button
                 onClick={handleCreateNew}
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 transition-all shadow-sm hover:shadow-md"
               >
                 <Plus className="w-4 h-4" />
-                新建配置
+                New Configuration
               </button>
            </div>
         </div>
@@ -302,8 +302,8 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
             {configs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-zinc-400 bg-white border border-dashed border-zinc-200 rounded-2xl">
                 <Box className="w-12 h-12 mb-3 opacity-50" />
-                <p className="text-sm font-medium">暂无配置</p>
-                <p className="text-xs mt-1">点击右上角“新建配置”开始使用</p>
+                <p className=”text-sm font-medium”>No configurations</p>
+                <p className=”text-xs mt-1”>Click “New Configuration” in the top right to get started</p>
               </div>
             ) : (
               configs.map((config) => {
@@ -325,7 +325,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
                         </h3>
                         {isActive ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium bg-zinc-900 text-white rounded-full">
-                             <CheckCircle2 className="w-3 h-3" /> 当前使用
+                             <CheckCircle2 className="w-3 h-3" /> Currently Active
                           </span>
                         ) : (
                           <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-medium bg-zinc-100 text-zinc-500 rounded-full uppercase border border-zinc-200">
@@ -353,7 +353,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
                       {!isActive && (
                         <button
                           onClick={() => handleSetActive(config.id)}
-                          title="设为当前"
+                          title="Set as Active"
                           className="p-2 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
                         >
                           <CheckCircle2 className="w-4 h-4" />
@@ -362,7 +362,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
                       {/* <button
                         onClick={() => handleTestConnection(config)}
                         disabled={isLoading}
-                        title="测试连接"
+                        title="Test Connection"
                         className={cn(
                            "p-2 rounded-lg transition-colors",
                            isLoading ? "text-zinc-300" : "text-zinc-400 hover:text-emerald-600 hover:bg-emerald-50"
@@ -372,21 +372,21 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
                       </button> */}
                       <button
                         onClick={() => handleEdit(config)}
-                        title="编辑"
+                        title="Edit"
                         className="p-2 rounded-lg text-zinc-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                       >
                         <Pencil className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleClone(config)}
-                        title="克隆"
+                        title="Clone"
                         className="p-2 rounded-lg text-zinc-400 hover:text-purple-600 hover:bg-purple-50 transition-colors"
                       >
                         <Copy className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(config.id)}
-                        title="删除"
+                        title="Delete"
                         className="p-2 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -446,7 +446,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
 
   const handleLoadModels = async () => {
     if (!formData.type || !formData.baseUrl || !formData.apiKey) {
-      setError('请先填写提供商类型、基础 URL 和 API 密钥');
+      setError('Please fill in provider type, base URL and API key first');
       return;
     }
 
@@ -464,7 +464,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || '加载模型失败');
+        throw new Error(data.error || 'Failed to load models');
       }
 
       setModels(data.models);
@@ -478,7 +478,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
 
   const handleSave = () => {
     if (!formData.name || !formData.type || !formData.baseUrl || !formData.apiKey || !formData.model) {
-      setError('请填写所有必填字段');
+      setError('Please fill in all required fields');
       return;
     }
 
@@ -495,7 +495,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 bg-zinc-50/50">
           <h2 className="text-lg font-semibold text-zinc-900">
-            {isCreating ? '新建配置' : '编辑配置'}
+            {isCreating ? 'New Configuration' : 'Edit Configuration'}
           </h2>
           <button
             onClick={onCancel}
@@ -519,24 +519,24 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
             <div className="space-y-4 p-4 bg-zinc-50 rounded-xl border border-zinc-100">
                 <div>
                     <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                    配置名称 <span className="text-red-500">*</span>
+                    Configuration Name <span className="text-red-500">*</span>
                     </label>
                     <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="例如：我的 OpenAI"
+                    placeholder="e.g.: My OpenAI"
                     className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white"
                     />
                 </div>
                 <div>
                     <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                    描述
+                    Description
                     </label>
                     <textarea
                     value={formData.description || ''}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="配置描述（可选）"
+                    placeholder="Configuration description (optional)"
                     rows={2}
                     className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white resize-none"
                     />
@@ -545,11 +545,11 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
 
             {/* Connection Details */}
             <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">连接信息</h3>
-                
+                <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">Connection Information</h3>
+
                 <div>
                     <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                    提供商类型 <span className="text-red-500">*</span>
+                    Provider Type <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                         <select
@@ -557,7 +557,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
                         onChange={(e) => setFormData({ ...formData, type: e.target.value, model: '' })}
                         className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white appearance-none"
                         >
-                        <option value="openai">OpenAI (或兼容)</option>
+                        <option value="openai">OpenAI (or compatible)</option>
                         <option value="anthropic">Anthropic</option>
                         </select>
                         <div className="absolute right-3 top-2.5 pointer-events-none text-zinc-400">
@@ -568,7 +568,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
 
                 <div>
                     <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                    基础 URL <span className="text-red-500">*</span>
+                    Base URL <span className="text-red-500">*</span>
                     </label>
                     <div className="relative group">
                          <Server className="absolute left-3 top-2.5 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-600 transition-colors" />
@@ -584,7 +584,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
 
                 <div>
                     <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                    API 密钥 <span className="text-red-500">*</span>
+                    API Key <span className="text-red-500">*</span>
                     </label>
                     <div className="relative group">
                         <Key className="absolute left-3 top-2.5 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-600 transition-colors" />
@@ -602,14 +602,14 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
             {/* Model Selection */}
             <div className="space-y-4 border-t border-zinc-100 pt-4">
                 <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">模型选择</h3>
+                    <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">Model Selection</h3>
                     <button
                         onClick={handleLoadModels}
                         disabled={loading}
                         className="text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition-colors flex items-center gap-1 disabled:opacity-50"
                     >
                         {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Search className="w-3 h-3" />}
-                        {loading ? '加载中...' : '获取模型列表'}
+                        {loading ? 'Loading...' : 'Get Model List'}
                     </button>
                 </div>
                 
@@ -629,7 +629,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
                                     !useCustomModel ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-zinc-700"
                                 )}
                             >
-                                列表选择
+                                Select from List
                             </button>
                             <button
                                 type="button"
@@ -642,7 +642,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
                                     useCustomModel ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-zinc-700"
                                 )}
                             >
-                                手动输入
+                                Manual Input
                             </button>
                         </div>
                     )}
@@ -669,7 +669,7 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
                         type="text"
                         value={formData.model}
                         onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-                        placeholder="例如：gpt-4、claude-3-opus-20240229"
+                        placeholder="e.g.: gpt-4, claude-3-opus-20240229"
                         className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white"
                     />
                     )}
@@ -684,13 +684,13 @@ function ConfigEditor({ config, isCreating, onSave, onCancel }) {
             onClick={onCancel}
             className="px-4 py-2 text-sm font-medium text-zinc-600 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
           >
-            取消
+            Cancel
           </button>
           <button
             onClick={handleSave}
             className="px-5 py-2 text-sm font-medium text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 shadow-sm hover:shadow-md transition-all"
           >
-            {isCreating ? '立即创建' : '保存修改'}
+            {isCreating ? 'Create Now' : 'Save Changes'}
           </button>
         </div>
       </div>

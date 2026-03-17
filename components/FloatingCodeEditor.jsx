@@ -333,7 +333,7 @@ export default function FloatingCodeEditor({
       <button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-16 left-4 w-12 h-12 bg-zinc-900 text-white rounded-full shadow-lg shadow-zinc-900/20 hover:shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center z-40 group"
-        title="展开代码编辑器"
+        title="Expand Code Editor"
       >
         <Terminal className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
       </button>
@@ -350,7 +350,7 @@ export default function FloatingCodeEditor({
             <Code2 className="w-3.5 h-3.5 text-zinc-600" />
           </div>
           <span className="text-sm font-medium text-zinc-700">
-            {engineType === 'excalidraw' ? 'JSON' : 'XML'} 编辑器
+            {engineType === 'excalidraw' ? 'JSON' : 'XML'} Editor
           </span>
         </div>
         <div className="flex items-center gap-1">
@@ -360,7 +360,7 @@ export default function FloatingCodeEditor({
             size="icon"
             className="h-8 w-8 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 rounded-lg transition-colors"
             onClick={handleCopy}
-            title="复制代码"
+            title="Copy Code"
             disabled={!localCode.trim()}
           >
             {copied ? (
@@ -375,7 +375,7 @@ export default function FloatingCodeEditor({
             size="icon"
             className="h-8 w-8 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 rounded-lg transition-colors"
             onClick={() => setIsOpen(false)}
-            title="收起"
+            title="Collapse"
           >
             <Minimize2 className="w-4 h-4" />
           </Button>
@@ -394,7 +394,7 @@ export default function FloatingCodeEditor({
           loading={
             <div className="flex items-center justify-center h-full text-zinc-400 gap-2">
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span className="text-xs">加载编辑器...</span>
+              <span className="text-xs">Loading editor...</span>
             </div>
           }
           options={{
@@ -428,17 +428,17 @@ export default function FloatingCodeEditor({
             "h-8 px-4 text-sm font-medium rounded-lg shadow-sm transition-all",
             isApplying ? "bg-zinc-100 text-zinc-400" : "bg-zinc-900 text-white hover:bg-zinc-800"
           )}
-          title="应用代码到画布"
+          title="Apply Code to Canvas"
         >
           {isApplying ? (
             <>
               <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
-              应用中
+              Applying
             </>
           ) : (
             <>
               <Play className="w-3.5 h-3.5 mr-1.5 fill-current" />
-              应用代码
+              Apply Code
             </>
           )}
         </Button>

@@ -54,7 +54,7 @@ export default function AppHeader({ onOpenSettings }) {
             onClick={handleNoticeClick}
             className="text-xs font-medium px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-50 to-rose-50 text-pink-600 border border-pink-200 hover:from-pink-100 hover:to-rose-100 hover:text-pink-700 hover:border-pink-300 transition-all shadow-sm active:scale-95"
           >
-            🎁 获取访问密码
+            🎁 Get Access Password
           </button>
           {/* Buy Me a Coffee Button */}
           <button
@@ -81,15 +81,15 @@ export default function AppHeader({ onOpenSettings }) {
               <line x1="10" y1="1" x2="10" y2="4" />
               <line x1="14" y1="1" x2="14" y2="4" />
             </svg>
-            <span>请作者喝杯奶茶</span>
+            <span>Buy me a coffee</span>
           </button>
           {/* Settings Button */}
           <button
             type="button"
             onClick={() => onOpenSettings && onOpenSettings()}
             className="text-gray-500 hover:text-gray-900 transition-colors p-1.5 hover:bg-gray-100 rounded-full"
-            aria-label="配置"
-            title="配置"
+            aria-label="Settings"
+            title="Settings"
           >
             <Settings className="w-[22px] h-[22px]" />
           </button>
@@ -99,8 +99,8 @@ export default function AppHeader({ onOpenSettings }) {
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-500 hover:text-gray-900 transition-colors p-1.5 hover:bg-gray-100 rounded-full"
-            aria-label="文档"
-            title="文档"
+            aria-label="Documentation"
+            title="Documentation"
           >
             <svg
               width="22"
@@ -145,13 +145,13 @@ export default function AppHeader({ onOpenSettings }) {
           <div className="relative bg-white rounded-xl border border-gray-200 w-full max-w-sm mx-4 overflow-hidden shadow-2xl transform transition-all">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/50">
               <h2 className="text-sm font-semibold text-gray-800">
-                🎁 进群获取访问密码，直接使用AI绘图功能
+                🎁 Join group to get access password for AI diagram features
               </h2>
               <button
                 type="button"
                 onClick={handleCloseNotice}
                 className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded-md hover:bg-gray-200"
-                aria-label="关闭"
+                aria-label="Close"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -163,12 +163,12 @@ export default function AppHeader({ onOpenSettings }) {
               <div className="p-2 bg-white border border-gray-100 rounded-lg shadow-sm">
                  <img
                   src="/qrcode.png"
-                  alt="进群二维码"
+                  alt="Group QR Code"
                   className="w-full h-auto rounded-md"
                 />
               </div>
               <p className="mt-4 text-xs text-gray-500 text-center">
-                扫描上方二维码加入群聊
+                Scan QR code to join the group
               </p>
             </div>
           </div>
@@ -181,13 +181,13 @@ export default function AppHeader({ onOpenSettings }) {
           <div className="relative bg-white rounded-xl border border-gray-200 w-full max-w-sm mx-4 overflow-hidden shadow-2xl transform transition-all">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/50">
               <h2 className="text-sm font-semibold text-gray-800">
-                ☕ 请作者喝杯奶茶
+                ☕ Buy me a coffee
               </h2>
               <button
                 type="button"
                 onClick={() => setIsSponsorOpen(false)}
                 className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded-md hover:bg-gray-200"
-                aria-label="关闭"
+                aria-label="Close"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -199,7 +199,7 @@ export default function AppHeader({ onOpenSettings }) {
               <div className="p-2 bg-white border border-gray-100 rounded-lg shadow-sm">
                 <img
                   src="/sponsor.png"
-                  alt="赞助二维码"
+                  alt="Sponsor QR Code"
                   className="w-full h-auto rounded-md"
                 />
               </div>

@@ -138,7 +138,7 @@ export default function LandingPage() {
         return savedLanguage;
       }
     }
-    return 'zh';
+    return 'en';
   });
   const t = translations[language];
 
@@ -192,7 +192,7 @@ export default function LandingPage() {
                   onClick={() => setLanguage('zh')}
                   className={`${getHandwritingClass()} paper-btn btn-small ${language === 'zh' ? 'btn-primary' : 'btn-secondary'}`}
                 >
-                  中文
+                  ZH
                 </button>
                 <button
                   onClick={() => setLanguage('en')}

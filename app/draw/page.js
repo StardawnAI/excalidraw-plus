@@ -206,8 +206,8 @@ export default function DrawPage() {
     // 弹窗确认
     setConfirmDialog({
       isOpen: true,
-      title: '切换绘图引擎',
-      message: '切换绘图引擎将清空当前对话历史和画布内容，确定要切换吗？',
+      title: 'Switch Drawing Engine',
+      message: 'Switching the drawing engine will clear the current conversation history and canvas content. Are you sure you want to switch?',
       type: 'warning',
       onConfirm: () => {
         clearFloatingCodeCache();
@@ -307,8 +307,8 @@ export default function DrawPage() {
     if (history.editor && history.editor !== engineType) {
       setConfirmDialog({
         isOpen: true,
-        title: '切换引擎',
-        message: `该历史记录使用的是 ${history.editor === 'drawio' ? 'Draw.io' : 'Excalidraw'} 引擎，当前是 ${engineType === 'drawio' ? 'Draw.io' : 'Excalidraw'} 引擎。\n\n是否切换引擎？切换后将清空当前对话。`,
+        title: 'Switch Engine',
+        message: `This history record was created using the ${history.editor === 'drawio' ? 'Draw.io' : 'Excalidraw'} engine, but you are currently using the ${engineType === 'drawio' ? 'Draw.io' : 'Excalidraw'} engine.\n\nSwitch engine? Switching will clear the current conversation.`,
         type: 'warning',
         onConfirm: () => {
           clearFloatingCodeCache();
@@ -327,7 +327,7 @@ export default function DrawPage() {
     // 引擎类型匹配，直接恢复
     await engine.handleRestoreHistory(history);
     setIsHistoryModalOpen(false);
-    showNotification({ title: '已恢复', message: '历史记录已恢复', type: 'success' });
+    showNotification({ title: 'Restored', message: 'History record has been restored', type: 'success' });
   }, [engineType, engine, showNotification, clearFloatingCodeCache]);
 
   /**
@@ -491,9 +491,9 @@ export default function DrawPage() {
       <Dialog open={isAnnouncementOpen} onOpenChange={setIsAnnouncementOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>公告</DialogTitle>
+            <DialogTitle>Announcement</DialogTitle>
             <DialogDescription>
-              本网站将迁移至更全面强大的新版本：
+              This website will be migrating to a more comprehensive and powerful new version:
               <a
                 href="https://ai-draw-nexus.aizhi.site/"
                 target="_blank"
@@ -509,7 +509,7 @@ export default function DrawPage() {
               onClick={() => setIsAnnouncementOpen(false)}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
-              我知道了
+              Got it
             </button>
           </DialogFooter>
         </DialogContent>

@@ -38,7 +38,7 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
 
   const handleLoadModels = async () => {
     if (!config.type || !config.baseUrl || !config.apiKey) {
-      setError('请先填写提供商类型、基础 URL 和 API 密钥');
+      setError('Please fill in provider type, base URL and API key first');
       return;
     }
 
@@ -56,17 +56,17 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || '加载模型失败');
+        throw new Error(data.error || 'Failed to load models');
       }
 
       setModels(data.models);
       if (data.models.length > 0) {
-        // 如果当前模型不在新加载的列表中，切换到列表选择模式
+        // If current model is not in the newly loaded list, switch to list selection mode
         if (config.model && !data.models.some(m => m.id === config.model)) {
           setUseCustomModel(false);
           setConfig(prev => ({ ...prev, model: data.models[0].id }));
         } else if (!config.model && !useCustomModel) {
-          // 如果没有选择模型且不是手动输入模式，自动选择第一个
+          // If no model is selected and not in manual input mode, automatically select the first one
           setConfig(prev => ({ ...prev, model: data.models[0].id }));
         }
       }
@@ -80,7 +80,7 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
 
   const handleSave = () => {
     if (!config.type || !config.baseUrl || !config.apiKey || !config.model) {
-      setError('请填写所有必填字段');
+      setError('Please fill in all required fields');
       return;
     }
 
@@ -107,8 +107,8 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
               <Settings className="w-5 h-5 text-zinc-600" />
             </div>
             <div>
-                <h2 className="text-lg font-semibold text-zinc-900">LLM 配置</h2>
-                <p className="text-xs text-zinc-500">设置 API 连接参数</p>
+                <h2 className="text-lg font-semibold text-zinc-900">LLM Configuration</h2>
+                <p className="text-xs text-zinc-500">Configure API connection parameters</p>
             </div>
           </div>
           <button
@@ -130,9 +130,9 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
                 </div>
               )}
               
-              <div className="px-4 py-3 bg-blue-50/50 border border-blue-100 rounded-xl flex items-start gap-2 text-sm text-blue-600">
-                <Info className="w-4 h-4 mt-0.5 shrink-0" />
-                <span>提示：若启用了“访问密码”模式，系统将优先使用服务器端配置。</span>
+              <div className=”px-4 py-3 bg-blue-50/50 border border-blue-100 rounded-xl flex items-start gap-2 text-sm text-blue-600”>
+                <Info className=”w-4 h-4 mt-0.5 shrink-0” />
+                <span>Note: If “Access Password” mode is enabled, the system will prioritize using the server-side configuration.</span>
               </div>
           </div>
 
@@ -140,13 +140,13 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
           <div className="space-y-4">
             <div>
                 <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                  配置名称
+                  Configuration Name
                 </label>
                 <input
                   type="text"
                   value={config.name}
                   onChange={(e) => setConfig({ ...config, name: e.target.value })}
-                  placeholder="例如：我的 OpenAI"
+                  placeholder="e.g.: My OpenAI"
                   className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white"
                 />
             </div>
@@ -154,11 +154,11 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
 
           {/* Section 2: Connection Settings */}
           <div className="space-y-4 pt-2">
-            <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">连接设置</h3>
-            
+            <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">Connection Settings</h3>
+
             <div>
               <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                提供商类型 <span className="text-red-500">*</span>
+                Provider Type <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <select
@@ -166,8 +166,8 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
                   onChange={(e) => setConfig({ ...config, type: e.target.value, model: '' })}
                   className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white appearance-none"
                 >
-                  <option value="openai">OpenAI 兼容 (如 DeepSeek)</option>
-                  <option value="anthropic">Anthropic 兼容</option>
+                  <option value="openai">OpenAI Compatible (e.g. DeepSeek)</option>
+                  <option value="anthropic">Anthropic Compatible</option>
                 </select>
                 <div className="absolute right-3 top-2.5 pointer-events-none text-zinc-400">
                    <Bot className="w-4 h-4" />
@@ -177,7 +177,7 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
 
             <div>
               <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                基础 URL <span className="text-red-500">*</span>
+                Base URL <span className="text-red-500">*</span>
               </label>
               <div className="relative group">
                 <Server className="absolute left-3 top-2.5 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-600 transition-colors" />
@@ -193,7 +193,7 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
 
             <div>
               <label className="block text-xs font-medium text-zinc-500 mb-1.5">
-                API 密钥 <span className="text-red-500">*</span>
+                API Key <span className="text-red-500">*</span>
               </label>
               <div className="relative group">
                 <Key className="absolute left-3 top-2.5 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-600 transition-colors" />
@@ -211,14 +211,14 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
           {/* Section 3: Model Settings */}
           <div className="space-y-4 pt-2 border-t border-zinc-100">
              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">模型参数</h3>
+                <h3 className="text-xs font-semibold text-zinc-900 uppercase tracking-wider px-1">Model Parameters</h3>
                 <button
                   onClick={handleLoadModels}
                   disabled={loading}
                   className="text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition-colors flex items-center gap-1 disabled:opacity-50"
                 >
                   {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Search className="w-3 h-3" />}
-                  {loading ? '加载中...' : '获取模型列表'}
+                  {loading ? 'Loading...' : 'Get Model List'}
                 </button>
              </div>
 
@@ -238,7 +238,7 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
                             !useCustomModel ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-zinc-700"
                         )}
                     >
-                        列表选择
+                        Select from List
                     </button>
                     <button
                         type="button"
@@ -251,7 +251,7 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
                             useCustomModel ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-zinc-700"
                         )}
                     >
-                        手动输入
+                        Manual Input
                     </button>
                 </div>
               )}
@@ -278,12 +278,12 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
                   type="text"
                   value={config.model}
                   onChange={(e) => setConfig({ ...config, model: e.target.value })}
-                  placeholder="例如：gpt-4、claude-3-opus-20240229"
+                  placeholder="e.g.: gpt-4, claude-3-opus-20240229"
                   className="w-full px-3 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all bg-white"
                 />
               )}
               <p className="text-[10px] text-zinc-400 mt-1.5 px-1">
-                  推荐使用 claude-sonnet-3.5 或 gpt-4o 以获得最佳效果
+                  Recommended: claude-sonnet-3.5 or gpt-4o for best results
               </p>
             </div>
           </div>
@@ -295,13 +295,13 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
             onClick={onClose}
             className="px-4 py-2 text-sm font-medium text-zinc-600 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
           >
-            取消
+            Cancel
           </button>
           <button
             onClick={handleSave}
             className="px-6 py-2 text-sm font-medium text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 shadow-sm hover:shadow-md transition-all"
           >
-            保存配置
+            Save Configuration
           </button>
         </div>
       </div>

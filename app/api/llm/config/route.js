@@ -17,7 +17,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          error: '服务器未配置访问密码'
+          error: 'Server access password not configured'
         },
         { status: 400 }
       );
@@ -28,7 +28,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          error: '访问密码错误'
+          error: 'Invalid access password'
         },
         { status: 401 }
       );
@@ -47,7 +47,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          error: 'LLM配置不完整'
+          error: 'Incomplete LLM configuration'
         },
         { status: 500 }
       );

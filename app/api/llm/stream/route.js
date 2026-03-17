@@ -31,14 +31,14 @@ export async function POST(request) {
       const envPassword = process.env.ACCESS_PASSWORD;
       if (!envPassword) {
         return NextResponse.json(
-          { error: '服务器未配置访问密码' },
+          { error: 'Server access password not configured' },
           { status: 400 },
         );
       }
 
       if (accessPassword !== envPassword) {
         return NextResponse.json(
-          { error: '访问密码错误' },
+          { error: 'Invalid access password' },
           { status: 401 },
         );
       }
@@ -52,7 +52,7 @@ export async function POST(request) {
 
       if (!serverConfig.type || !serverConfig.apiKey) {
         return NextResponse.json(
-          { error: '服务器端 LLM 配置不完整' },
+          { error: 'Incomplete server-side LLM configuration' },
           { status: 500 },
         );
       }
