@@ -1,0 +1,35 @@
+name: Check for Chinese UI Text
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan for Chinese in UI strings
+        run: |
+          echo "🔍 Scanning for Chinese text in UI patterns..."
+
+          # Find Chinese in JSX content and string attributes
+          # Pattern: Chinese chars inside quotes or between JSX tags
+
+          FOUND=$(grep -rn --include="*.jsx" --include="*.js" \
+            -E "(>[^<]*[\u4e00-\u9fff]|\"[^\"]*[\u4e00-\u9fff][^\"]*\"|'[^']*[\u4e00-\u9fff][^']*')" \
+            components/ app/ lib/constants.js 2>/dev/null | \
+            grep -v "LandingPage.jsx" | \
+            grep -v "translations\[" | \
+            grep -v "// " | \
+            grep -v "/\*" || true)
+
+          if [ -n "$FOUND" ]; then
+            echo "⚠️ Potential Chinese UI text found:"
+            echo "$FOUND"
+            echo ""
+            echo "Please review and translate if user-visible."
+          else
+            echo "✅ No Chinese UI text detected"
+          fi
