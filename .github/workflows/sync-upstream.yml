@@ -2,14 +2,8 @@ name: Sync Upstream
 
 on:
   schedule:
-    # Run weekly on Monday at 9:00 UTC
     - cron: '0 9 * * 1'
   workflow_dispatch:
-    inputs:
-      sync_branch:
-        description: 'Upstream branch to sync from'
-        required: false
-        default: 'main'
 
 jobs:
   sync:
@@ -17,6 +11,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout
@@ -30,151 +25,51 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Add upstream remote
+      - name: Fetch upstream
         run: |
           git remote add upstream https://github.com/liujuntao123/smart-draw.git || true
           git fetch upstream
 
-      - name: Check for new commits
+      - name: Check for changes
         id: check
         run: |
-          UPSTREAM_BRANCH="${{ github.event.inputs.sync_branch || 'main' }}"
-          LOCAL_COMMIT=$(git rev-parse HEAD)
-          UPSTREAM_COMMIT=$(git rev-parse upstream/$UPSTREAM_BRANCH)
-
-          if [ "$LOCAL_COMMIT" = "$UPSTREAM_COMMIT" ]; then
+          if git diff HEAD..upstream/main --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No new upstream changes"
           else
-            CHANGES=$(git log HEAD..upstream/$UPSTREAM_BRANCH --oneline | head -20)
             echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "New upstream commits found:"
-            echo "$CHANGES"
-
-            # Save for PR description
-            echo "CHANGES<<EOF" >> $GITHUB_ENV
-            echo "$CHANGES" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
+            git log HEAD..upstream/main --oneline | head -20 > /tmp/changes.txt
           fi
 
-      - name: Create sync branch
-        if: steps.check.outputs.has_changes == 'true'
-        run: |
-          BRANCH_NAME="sync/upstream-$(date +%Y%m%d)"
-          git checkout -b $BRANCH_NAME
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-
-      - name: Merge upstream (allow conflicts)
+      - name: Attempt merge
         if: steps.check.outputs.has_changes == 'true'
         id: merge
         run: |
-          UPSTREAM_BRANCH="${{ github.event.inputs.sync_branch || 'main' }}"
-
-          # Attempt merge
-          if git merge upstream/$UPSTREAM_BRANCH --no-edit; then
-            echo "merge_status=clean" >> $GITHUB_OUTPUT
+          git checkout -b sync/upstream-$(date +%Y%m%d)
+          if git merge upstream/main --no-edit; then
+            echo "status=clean" >> $GITHUB_OUTPUT
           else
-            echo "merge_status=conflicts" >> $GITHUB_OUTPUT
-
-            # List conflicting files
-            CONFLICTS=$(git diff --name-only --diff-filter=U)
-            echo "Conflicts in:"
-            echo "$CONFLICTS"
-
-            echo "CONFLICTS<<EOF" >> $GITHUB_ENV
-            echo "$CONFLICTS" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-
-            # Abort merge for now - PR will be created for manual resolution
             git merge --abort
+            echo "status=conflicts" >> $GITHUB_OUTPUT
           fi
 
-      - name: Push sync branch (clean merge)
-        if: steps.check.outputs.has_changes == 'true' && steps.merge.outputs.merge_status == 'clean'
-        run: |
-          git push origin $BRANCH_NAME
-
-      - name: Create PR (clean merge)
-        if: steps.check.outputs.has_changes == 'true' && steps.merge.outputs.merge_status == 'clean'
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ env.BRANCH_NAME }}
-          title: "🔄 Sync upstream changes"
-          body: |
-            ## Upstream Sync
-
-            This PR syncs changes from the upstream repository.
-
-            ### Upstream commits included:
-            ```
-            ${{ env.CHANGES }}
-            ```
-
-            ### Review Checklist
-            - [ ] Check that English translations are preserved
-            - [ ] Verify no Chinese UI text was reintroduced
-            - [ ] Test the application locally
-
-            ---
-            *Automated sync from [liujuntao123/smart-draw](https://github.com/liujuntao123/smart-draw)*
-          labels: |
-            upstream-sync
-            automated
-
-      - name: Create Issue (merge conflicts)
-        if: steps.check.outputs.has_changes == 'true' && steps.merge.outputs.merge_status == 'conflicts'
-        uses: peter-evans/create-issue-from-file@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "⚠️ Upstream sync requires manual merge"
-          content-filepath: /dev/stdin
-          labels: |
-            upstream-sync
-            needs-attention
+      - name: Push and create PR
+        if: steps.check.outputs.has_changes == 'true' && steps.merge.outputs.status == 'clean'
         env:
-          CONFLICTS: ${{ env.CONFLICTS }}
-          CHANGES: ${{ env.CHANGES }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cat << 'EOF'
-          ## Manual Merge Required
+          BRANCH=$(git branch --show-current)
+          git push origin $BRANCH
+          gh pr create \
+            --title "🔄 Sync upstream changes" \
+            --body "Automated sync from upstream. Review for Chinese UI text." \
+            --label "upstream-sync"
 
-          The automatic upstream sync encountered merge conflicts that need manual resolution.
-
-          ### Conflicting files:
-          ```
-          ${{ env.CONFLICTS }}
-          ```
-
-          ### Upstream commits to merge:
-          ```
-          ${{ env.CHANGES }}
-          ```
-
-          ### How to resolve:
-
-          ```bash
-          # Fetch upstream
-          git fetch upstream
-
-          # Create sync branch
-          git checkout -b sync/upstream-manual
-
-          # Merge with conflicts
-          git merge upstream/main
-
-          # Resolve conflicts (keep English translations!)
-          # Then commit and push
-          git add .
-          git commit -m "Merge upstream changes, preserve English UI"
-          git push origin sync/upstream-manual
-          ```
-
-          ### Files likely needing English preservation:
-          - `components/*.jsx` - UI components
-          - `app/**/*.js` - Pages and API routes
-          - `lib/constants.js` - Chart type names
-
-          ---
-          *Automated notification from upstream sync workflow*
-          EOF
+      - name: Create issue for conflicts
+        if: steps.check.outputs.has_changes == 'true' && steps.merge.outputs.status == 'conflicts'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "⚠️ Upstream sync has conflicts" \
+            --body "Manual merge required. Run: git fetch upstream && git merge upstream/main" \
+            --label "upstream-sync"
