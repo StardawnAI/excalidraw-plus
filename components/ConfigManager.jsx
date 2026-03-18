@@ -261,7 +261,7 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
         <div className="px-6 py-4 border-b border-zinc-100 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
            <p className="text-xs text-zinc-500 bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg border border-blue-100 inline-flex items-center">
               <Activity className="w-3.5 h-3.5 mr-2" />
-              Note: If “Access Password” mode is enabled, server-side configuration will be prioritized.
+              Note: If "Access Password" mode is enabled, server-side configuration will be prioritized.
            </p>
            <div className="flex items-center gap-2">
               <button
@@ -302,8 +302,8 @@ export default function ConfigManager({ isOpen, onClose, onConfigSelect }) {
             {configs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-zinc-400 bg-white border border-dashed border-zinc-200 rounded-2xl">
                 <Box className="w-12 h-12 mb-3 opacity-50" />
-                <p className=”text-sm font-medium”>No configurations</p>
-                <p className=”text-xs mt-1”>Click “New Configuration” in the top right to get started</p>
+                <p className="text-sm font-medium">No configurations</p>
+                <p className="text-xs mt-1">Click "New Configuration" in the top right to get started</p>
               </div>
             ) : (
               configs.map((config) => {
