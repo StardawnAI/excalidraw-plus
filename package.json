@@ -1,6 +1,6 @@
 {
-  "name": "smart-excalidraw-next",
-  "version": "0.1.0",
+  "name": "excalidraw-plus",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
