@@ -67,6 +67,7 @@ export default function ExcalidrawCanvas({ elements }) {
       <Excalidraw
         key={canvasKey}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
+        langCode="en"
         initialData={{
           elements: convertedElements,
           appState: {
