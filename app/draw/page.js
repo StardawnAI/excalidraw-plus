@@ -34,7 +34,7 @@ const ExcalidrawCanvas = dynamic(() => import('@/components/ExcalidrawCanvas'), 
 
 export default function DrawPage() {
   // 引擎类型状态（核心状态）
-  const [engineType, setEngineType] = useState('drawio'); // 'drawio' | 'excalidraw'
+  const [engineType, setEngineType] = useState('excalidraw'); // 'drawio' | 'excalidraw'
 
   // 调用useEngine Hook获取引擎实例
   const engine = useEngine(engineType);
