@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: white;
+    }
+    #canvas {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // Elements will be injected by Puppeteer
+    window.renderElements = (elements) => {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Calculate bounds
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      elements.forEach(el => {
+        const x = el.x || 0;
+        const y = el.y || 0;
+        const w = el.width || 100;
+        const h = el.height || 50;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x + w);
+        maxY = Math.max(maxY, y + h);
+      });
+
+      const padding = 40;
+      const width = maxX - minX + padding * 2;
+      const height = maxY - minY + padding * 2;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      // Translate context to center content
+      ctx.translate(padding - minX, padding - minY);
+
+      // Render elements
+      elements.forEach(el => {
+        const x = el.x || 0;
+        const y = el.y || 0;
+        const w = el.width || 100;
+        const h = el.height || 50;
+
+        ctx.save();
+
+        // Set styles
+        ctx.strokeStyle = el.strokeColor || '#000';
+        ctx.fillStyle = el.backgroundColor || 'transparent';
+        ctx.lineWidth = el.strokeWidth || 1;
+
+        if (el.type === 'rectangle') {
+          if (el.backgroundColor !== 'transparent') {
+            ctx.fillRect(x, y, w, h);
+          }
+          ctx.strokeRect(x, y, w, h);
+        } else if (el.type === 'ellipse') {
+          ctx.beginPath();
+          ctx.ellipse(x + w/2, y + h/2, w/2, h/2, 0, 0, Math.PI * 2);
+          if (el.backgroundColor !== 'transparent') {
+            ctx.fill();
+          }
+          ctx.stroke();
+        } else if (el.type === 'diamond') {
+          ctx.beginPath();
+          ctx.moveTo(x + w/2, y);
+          ctx.lineTo(x + w, y + h/2);
+          ctx.lineTo(x + w/2, y + h);
+          ctx.lineTo(x, y + h/2);
+          ctx.closePath();
+          if (el.backgroundColor !== 'transparent') {
+            ctx.fill();
+          }
+          ctx.stroke();
+        } else if (el.type === 'arrow' || el.type === 'line') {
+          ctx.beginPath();
+          const points = el.points || [[0,0], [w, h]];
+          ctx.moveTo(x + points[0][0], y + points[0][1]);
+          for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(x + points[i][0], y + points[i][1]);
+          }
+          ctx.stroke();
+        } else if (el.type === 'text') {
+          ctx.font = `${el.fontSize || 20}px ${el.fontFamily || 'Arial'}`;
+          ctx.fillStyle = el.strokeColor || '#000';
+          ctx.fillText(el.text || '', x, y + (el.fontSize || 20));
+        }
+
+        ctx.restore();
+      });
+
+      window.renderComplete = true;
+    };
+  </script>
+</body>
+</html>
