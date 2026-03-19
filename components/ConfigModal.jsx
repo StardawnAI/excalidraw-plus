@@ -7,7 +7,7 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig, sh
   const [config, setConfig] = useState({
     name: '',
     type: 'openai',
-    baseUrl: '',
+    baseUrl: 'https://api.openai.com/v1',
     apiKey: '',
     model: '',
   });
@@ -16,10 +16,22 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig, sh
   const [error, setError] = useState('');
   const [useCustomModel, setUseCustomModel] = useState(false);
 
-  // 仅在初始配置变更时同步到本地表单状态，避免在模型加载失败时还原用户输入
+  // Sync initial config and set default baseUrl if empty
   useEffect(() => {
     if (initialConfig) {
       setConfig(initialConfig);
+    } else {
+      // Set default baseUrl for new configs
+      setConfig(prev => {
+        if (!prev.baseUrl) {
+          const defaultUrls = {
+            openai: 'https://api.openai.com/v1',
+            anthropic: 'https://api.anthropic.com/v1'
+          };
+          return { ...prev, baseUrl: defaultUrls[prev.type] || '' };
+        }
+        return prev;
+      });
     }
   }, [initialConfig]);
 
@@ -145,7 +157,20 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig, sh
             </label>
             <select
               value={config.type}
-              onChange={(e) => setConfig({ ...config, type: e.target.value, model: '' })}
+              onChange={(e) => {
+                const newType = e.target.value;
+                const defaultUrls = {
+                  openai: 'https://api.openai.com/v1',
+                  anthropic: 'https://api.anthropic.com/v1'
+                };
+                setConfig({
+                  ...config,
+                  type: newType,
+                  baseUrl: defaultUrls[newType] || '',
+                  model: ''
+                });
+                setModels([]);
+              }}
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900"
             >
               <option value="openai">OpenAI</option>

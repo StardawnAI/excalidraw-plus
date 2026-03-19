@@ -1,0 +1,74 @@
+/* 中文手写字体 - 仅用于 Landing Page */
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
+
+/* 定义字体变量 */
+:root {
+  --handwriting-font: 'Ma Shan Zheng', cursive;
+}
+
+/* 为中文内容应用手写字体 */
+.landing-handwriting {
+  font-family: var(--handwriting-font);
+}
+
+/* Hero 标题手写字体 */
+.hero-title-handwriting {
+  font-family: var(--handwriting-font);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* 特性卡片标题手写字体 */
+.feature-title-handwriting {
+  font-family: var(--handwriting-font);
+  font-weight: 400;
+}
+
+/* 步骤标题手写字体 */
+.step-title-handwriting {
+  font-family: var(--handwriting-font);
+  font-weight: 400;
+}
+
+/* Section 标题手写字体 */
+.section-title-handwriting {
+  font-family: var(--handwriting-font);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* 特性卡片高度统一 */
+.feature-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 280px;
+}
+
+.feature-card .card-text {
+  flex: 1;
+}
+
+/* 引擎卡片高度统一 */
+.engine-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.engine-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 360px;
+}
+
+.engine-card .card-text {
+  flex: 1;
+}

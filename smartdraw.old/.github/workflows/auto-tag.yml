@@ -1,0 +1,94 @@
+name: Auto Version Tag
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'package.json'  # 避免版本更新触发循环
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Get current version
+        id: current_version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG="v${{ steps.current_version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bump version
+        if: steps.check_tag.outputs.exists == 'true'
+        id: bump_version
+        run: |
+          # 递增 patch 版本
+          CURRENT="${{ steps.current_version.outputs.version }}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+
+          # 更新 package.json
+          npm version $NEW_VERSION --no-git-tag-version
+
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit version bump
+        if: steps.check_tag.outputs.exists == 'true'
+        run: |
+          git add package.json
+          git commit -m "chore: bump version to ${{ steps.bump_version.outputs.new_version }}"
+          git push
+
+      - name: Determine tag version
+        id: tag_version
+        run: |
+          if [ "${{ steps.check_tag.outputs.exists }}" == "true" ]; then
+            echo "version=${{ steps.bump_version.outputs.new_version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ steps.current_version.outputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and push tag
+        run: |
+          TAG="v${{ steps.tag_version.outputs.version }}"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+          echo "Created tag: $TAG"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.tag_version.outputs.version }}
+          name: Release v${{ steps.tag_version.outputs.version }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

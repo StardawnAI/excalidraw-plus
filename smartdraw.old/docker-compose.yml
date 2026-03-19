@@ -1,0 +1,18 @@
+services:
+  excalidraw-plus:
+    image: 'ghcr.io/stardawnai/excalidraw-plus:latest'
+    restart: always
+    expose:
+      - '3000'
+    labels:
+      - 'traefik.http.middlewares.cors-excalidraw.headers.accesscontrolalloworiginlist=*'
+      - 'traefik.http.middlewares.cors-excalidraw.headers.accesscontrolallowmethods=GET,POST,OPTIONS'
+      - 'traefik.http.middlewares.cors-excalidraw.headers.accesscontrolallowheaders=Content-Type,Authorization'
+      - traefik.http.middlewares.cors-excalidraw.headers.accesscontrolmaxage=3600
+    environment:
+      - NODE_ENV=production
+      - SERVER_LLM_TYPE=anthropic
+      - 'SERVER_LLM_BASE_URL=https://api.anthropic.com/v1'
+      - 'SERVER_LLM_API_KEY=${ANTHROPIC_API_KEY}'
+      - SERVER_LLM_MODEL=claude-sonnet-4-6
+      - 'ACCESS_PASSWORD=${ACCESS_PASSWORD}'
