@@ -50,6 +50,6 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trigger Coolify deployment
-        if: ${{ secrets.COOLIFY_WEBHOOK }}
+        if: ${{ secrets.COOLIFY_WEBHOOK != '' }}
         run: |
           curl -X GET "${{ secrets.COOLIFY_WEBHOOK }}"
